@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ue-video
+description: UE Helm chart that runs a UERANSIM-based UE and a ffmpeg sidecar streaming a synthetic video.
+type: application
+version: 0.1.0
+appVersion: "1.0"

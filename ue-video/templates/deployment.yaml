@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ue-video
+  labels:
+    app: ue-video
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: ue-video
+  template:
+    metadata:
+      labels:
+        app: ue-video
+    spec:
+      containers:
+        - name: ue
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/sh","-c"]
+          args:
+            - |
+              echo "Starting UERANSIM UE..."
+              nr-ue -c /config/ue.yaml
+          volumeMounts:
+            - name: ue-config
+              mountPath: /config/ue.yaml
+              subPath: ue.yaml
+
+        - name: ffmpeg
+          image: jrottenberg/ffmpeg:4.4-ubuntu
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh","-c"]
+          args:
+            - |
+              TARGET="{{ .Values.video.targetIP }}"
+              PORT="{{ .Values.video.targetPort }}"
+              LAVFI="{{ .Values.video.ffmpeg_lavfi }}"
+
+              echo "Waiting for PDU session (uesimtun0)..."
+              while ! ip addr show uesimtun0 >/dev/null 2>&1; do
+                  sleep 1
+              done
+
+              echo "PDU session detected! Starting ffmpeg stream to ${TARGET}:${PORT}"
+              ffmpeg -re -f lavfi -i "${LAVFI}" -c:v libx264 -preset ultrafast -tune zerolatency \
+                     -f mpegts "udp://${TARGET}:${PORT}?pkt_size=1316"
+
+      volumes:
+        - name: ue-config
+          configMap:
+            name: ue-video

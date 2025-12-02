@@ -1,0 +1,30 @@
+# Values for ue-video chart
+replicaCount: 1
+
+image:
+  registry: docker.io
+  repository: gradiant/ueransim
+  tag: 3.2.6
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+
+resources: {}
+
+# UE config values (will be rendered into the ue.yaml config used by UERANSIM)
+mcc: '208'
+mnc: '93'
+initialMSISDN: "100001"
+key: "8baf473f2f8fd09487cccbd7097c6862"
+op: "8e27b6af0e692e750f32667a2b3c4a3d"
+opType: "OPC"
+
+# Video streaming parameters for the ffmpeg sidecar
+video:
+  enabled: true
+  # Replace targetIP with the IP address of your host AS SEEN from the DN (UPF) network
+  targetIP: "10.74.147.107"
+  targetPort: 5004
+  # ffmpeg will use this test-src expression; can be changed to a file if you prefer
+  ffmpeg_lavfi: "testsrc=size=1280x720:rate=30"
