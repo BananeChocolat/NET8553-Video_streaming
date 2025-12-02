@@ -7,9 +7,9 @@ Groupe de projet:
  - Aurélien Jacques-Yonyul
  - Nicolas Riedel
 
-# Etat de l'art 
+# Etat de l'art
 
-
+[Consulter l'état de l'art complet (PDF)](./etat-de-lart.pdf)
 
 
 # Méthode de diffusion
