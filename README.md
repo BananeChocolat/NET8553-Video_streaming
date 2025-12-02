@@ -9,26 +9,26 @@ Groupe de projet:
 
 # État de l'art : Émulation de trafic vidéo & Orchestration
 
-[cite_start]L'intégration de flux vidéo réels dans NexSlice vise à dépasser les tests synthétiques (comme iperf3 ou ping) pour évaluer la **Qualité de Service (QoS)** et la **Qualité d'Expérience (QoE)** dans un environnement 5G réaliste[cite: 4].
+L'intégration de flux vidéo réels dans NexSlice vise à dépasser les tests synthétiques (comme iperf3 ou ping) pour évaluer la **Qualité de Service (QoS)** et la **Qualité d'Expérience (QoE)** dans un environnement 5G réaliste[cite: 4].
 
 Cette implémentation repose sur trois piliers majeurs :
 
 ## 1. Cadre Normatif et Standards 3GPP
-* [cite_start]**Architecture 5G :** Conformité avec le standard **TS 23.501**, utilisant une architecture basée sur les services (SBA) et des instances de tranches de réseau (Network Slice Instances - NSI) isolées[cite: 7, 8].
-* [cite_start]**Modèle QoS :** Utilisation des **5QI (5G QoS Identifier)** recommandés pour la vidéo, notamment le **5QI 2** (conversationnel) et le **5QI 7** (streaming interactif non-GBR)[cite: 9, 11, 14].
-* [cite_start]**Profils de trafic :** Adoption des définitions du **TR 26.925** pour les débits types (720p à 4K) et du **TR 26.926** pour les modèles statistiques de trafic et la distribution des trames[cite: 16, 17].
+* **Architecture 5G :** Conformité avec le standard **TS 23.501**, utilisant une architecture basée sur les services (SBA) et des instances de tranches de réseau (Network Slice Instances - NSI) isolées[cite: 7, 8].
+* **Modèle QoS :** Utilisation des **5QI (5G QoS Identifier)** recommandés pour la vidéo, notamment le **5QI 2** (conversationnel) et le **5QI 7** (streaming interactif non-GBR)[cite: 9, 11, 14].
+* **Profils de trafic :** Adoption des définitions du **TR 26.925** pour les débits types (720p à 4K) et du **TR 26.926** pour les modèles statistiques de trafic et la distribution des trames[cite: 16, 17].
 
 ## 2. Stack Technique et Virtualisation
-* [cite_start]**Cœur et Radio :** Déploiement du cœur **OpenAirInterface** (Release 16/17) couplé à **UERANSIM** pour simuler les UEs et gNBs avec un support multi-slices sans matériel radio physique[cite: 3, 21, 28].
-* [cite_start]**Streaming Vidéo :** Implémentation via **GStreamer** ou **VLC** utilisant le transport RTP/UDP, privilégié pour les applications temps réel (< 100ms de latence)[cite: 33, 37].
-* [cite_start]**Métriques QoE :** Évaluation de la qualité perçue via des modèles paramétriques standardisés comme **ITU-T P.1203** (MOS) et **VMAF** (Netflix)[cite: 39, 40].
+* **Cœur et Radio :** Déploiement du cœur **OpenAirInterface** (Release 16/17) couplé à **UERANSIM** pour simuler les UEs et gNBs avec un support multi-slices sans matériel radio physique[cite: 3, 21, 28].
+* **Streaming Vidéo :** Implémentation via **GStreamer** ou **VLC** utilisant le transport RTP/UDP, privilégié pour les applications temps réel (< 100ms de latence)[cite: 33, 37].
+* **Métriques QoE :** Évaluation de la qualité perçue via des modèles paramétriques standardisés comme **ITU-T P.1203** (MOS) et **VMAF** (Netflix)[cite: 39, 40].
 
 ## 3. Orchestration Cloud-Native (Kubernetes)
-[cite_start]La plateforme évolue d'un déploiement Docker Compose vers **Kubernetes/K3s** pour s'aligner sur les principes Cloud-Native Network Functions (CNF)[cite: 43, 46, 47]. Cela permet :
+La plateforme évolue d'un déploiement Docker Compose vers **Kubernetes/K3s** pour s'aligner sur les principes Cloud-Native Network Functions (CNF)[cite: 43, 46, 47]. Cela permet :
 
-* [cite_start]**Auto-scaling (HPA) :** Adaptation horizontale automatique des ressources (ex: UPF) basée sur la charge CPU[cite: 51, 81].
-* [cite_start]**Isolation stricte :** Garantie des ressources par slice via les mécanismes natifs (Requests/Limits) et limitation de bande passante[cite: 55, 57].
-* [cite_start]**Automatisation Closed-loop :** Mise en œuvre du cycle **MAPE-K** (Monitor-Analyze-Plan-Execute) pour la reconfiguration dynamique du réseau face à la congestion[cite: 75].
+* **Auto-scaling (HPA) :** Adaptation horizontale automatique des ressources (ex: UPF) basée sur la charge CPU[cite: 51, 81].
+* **Isolation stricte :** Garantie des ressources par slice via les mécanismes natifs (Requests/Limits) et limitation de bande passante[cite: 55, 57].
+* **Automatisation Closed-loop :** Mise en œuvre du cycle **MAPE-K** (Monitor-Analyze-Plan-Execute) pour la reconfiguration dynamique du réseau face à la congestion[cite: 75].
 
 ---
 
